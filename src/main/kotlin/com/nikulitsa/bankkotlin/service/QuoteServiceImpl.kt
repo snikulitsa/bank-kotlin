@@ -3,11 +3,18 @@ package com.nikulitsa.bankkotlin.service
 import com.nikulitsa.bankkotlin.entity.Quote
 import com.nikulitsa.bankkotlin.repository.QuoteRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-class QuoteServiceImpl(val repository: QuoteRepository): QuoteService {
+class QuoteServiceImpl(
+    private val repository: QuoteRepository,
+    private val quotesQueue: QuotesQueue
+) : QuoteService {
 
+    @Transactional
     override fun save(quote: Quote): Quote {
-        return repository.save(quote);
+        val savedQuote = repository.save(quote)
+        quotesQueue.add(savedQuote)
+        return savedQuote
     }
 }
