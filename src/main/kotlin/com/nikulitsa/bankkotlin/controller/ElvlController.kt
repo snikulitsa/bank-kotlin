@@ -12,12 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 class ElvlController(private val service: ElvlService) {
 
     @GetMapping("/{isin}")
-    fun getByIsin(@PathVariable isin: String): Elvl {
-        return service.getByIsin(isin)
-    }
+    fun getByIsin(@PathVariable isin: String): Elvl = service.getByIsin(isin)
 
     @GetMapping("/all")
-    fun getAll(): List<Elvl> {
-        return service.getAll()
-    }
+    fun getAll(): List<Elvl> = service.getAll()
 }

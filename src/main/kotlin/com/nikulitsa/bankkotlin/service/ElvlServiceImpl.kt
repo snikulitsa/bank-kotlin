@@ -16,13 +16,10 @@ class ElvlServiceImpl(private val repository: ElvlRepository) : ElvlService {
                 ?: save(quote)
     }
 
-    override fun getByIsin(isin: String): Elvl {
-        return repository.findByIsin(isin) ?: throw EntityNotFoundException("Elvl not found")
-    }
+    override fun getByIsin(isin: String) =
+        repository.findByIsin(isin) ?: throw EntityNotFoundException("Elvl not found")
 
-    override fun getAll(): List<Elvl> {
-        return repository.findAll()
-    }
+    override fun getAll(): List<Elvl> = repository.findAll()
 
     private fun update(elvl: Elvl, quote: Quote): Elvl {
         val isin = elvl.isin

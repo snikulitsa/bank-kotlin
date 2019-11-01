@@ -8,7 +8,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "energy_level")
 data class Elvl(
-        @Id
-        val isin: String,
-        val elvl: BigDecimal
+    @Id
+    val isin: String,
+    val elvl: BigDecimal
 )
