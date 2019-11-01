@@ -1,18 +1,25 @@
 package com.nikulitsa.bankkotlin.service
 
 import org.slf4j.LoggerFactory
-import org.springframework.boot.ApplicationArguments
-import org.springframework.boot.ApplicationRunner
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.ContextClosedEvent
+import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Component
 class QuotesQueueListener(
     private val elvlService: ElvlService,
     private val quotesQueue: QuotesQueue
-) : ApplicationRunner {
+) {
 
-    override fun run(args: ApplicationArguments?) {
-        while (true) {
+    private val listen = AtomicBoolean(true)
+
+    @EventListener(ApplicationReadyEvent::class)
+    @Async
+    fun run() {
+        while (listen.get()) {
             try {
                 val polledQuote = quotesQueue.poll()
                 polledQuote?.let(elvlService::refreshElvl)
@@ -20,6 +27,11 @@ class QuotesQueueListener(
                 log.error(e.message, e)
             }
         }
+    }
+
+    @EventListener(ContextClosedEvent::class)
+    fun stop() {
+        listen.set(false)
     }
 
     companion object {

@@ -13,7 +13,5 @@ import javax.validation.Valid
 class QuoteController(val quoteService: QuoteService) {
 
     @PostMapping
-    fun save(@Valid @RequestBody quote: Quote): Quote {
-        return quoteService.save(quote)
-    }
+    fun save(@Valid @RequestBody quote: Quote): Quote = quoteService.save(quote)
 }
